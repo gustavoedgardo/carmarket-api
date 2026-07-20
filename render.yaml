@@ -18,7 +18,3 @@ services:
         value: CarMarket.Client
       - key: Cors__AllowedOrigins__0
         value: "https://TU-FRONTEND.vercel.app"
-    disk:
-      name: carmarket-data
-      mountPath: /app/data
-      sizeGB: 1
