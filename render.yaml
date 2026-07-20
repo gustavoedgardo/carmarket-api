@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: carmarket-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/cars
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ENABLE_SWAGGER
+        value: "true"
+      - key: Jwt__Key
+        generateValue: true
+      - key: Jwt__Issuer
+        value: CarMarket.Api
+      - key: Jwt__Audience
+        value: CarMarket.Client
+      - key: Cors__AllowedOrigins__0
+        value: "https://TU-FRONTEND.vercel.app"
+    disk:
+      name: carmarket-data
+      mountPath: /app/data
+      sizeGB: 1
