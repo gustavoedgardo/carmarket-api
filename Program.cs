@@ -28,8 +28,21 @@ builder.Services.AddCors(opt =>
     opt.AddPolicy("Frontend", policy =>
     {
         var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-                      ?? new[] { "http://localhost:5173", "http://localhost:3000" };
-        policy.WithOrigins(origins).AllowAnyHeader().AllowAnyMethod();
+                      ?? new[] { "*" };
+
+        if (origins.Contains("*"))
+        {
+            // Abierto a cualquier origen: cómodo mientras se prueba el
+            // frontend en distintos lugares (artifact, localhost, etc).
+            // No usamos cookies/credenciales (el JWT va en el header
+            // Authorization), así que AllowAnyOrigin es seguro acá.
+            // Antes de producción final: reemplazar por el dominio real.
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        }
+        else
+        {
+            policy.WithOrigins(origins).AllowAnyHeader().AllowAnyMethod();
+        }
     });
 });
 
